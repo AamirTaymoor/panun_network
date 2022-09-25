@@ -1,0 +1,38 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8098"
+    container_name: panun_network
+    restart: always
+    volumes:
+      - .:/panun_network
+    ports:
+      - "8098:8098"
+    # environment:
+    #   - DATABASE_HOST=mysql
+    depends_on:
+      - mysqln
+    # environment:
+    #    DB_NAME: panun_db
+    #    DB_HOST: mysqln
+    #    DB_USER: panun_admin
+    #    DB_PASS: '123123100'
+    #    DB_PORT: 3306
+  mysqln:
+    image: "mysql:5.7"
+    restart: always
+    environment:
+      MYSQL_DATABASE: panun_db
+      # MYSQL_USER: "panun_admin"
+      # MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: 123123100
+      MYSQL_TCP_PORT: 3309
+    ports:
+      - "3309:3306"
+    expose:
+      - "3309"
+    volumes:
+      - "./my.db:/var/lib/mysql"
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    

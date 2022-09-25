@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mysqln
+  name: mysqln
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mysqln
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose.yml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: mysqln
+    spec:
+      containers:
+        - args:
+            - mysqld
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
+          env:
+            - name: MYSQL_DATABASE
+              value: panun_db
+            - name: MYSQL_ROOT_PASSWORD
+              value: "123123100"
+            - name: MYSQL_TCP_PORT
+              value: "3309"
+          image: mysql:5.7
+          name: mysqln
+          ports:
+            - containerPort: 3306
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysqln-claim0
+      restartPolicy: Always
+      volumes:
+        - name: mysqln-claim0
+          persistentVolumeClaim:
+            claimName: mysqln-claim0
+status: {}

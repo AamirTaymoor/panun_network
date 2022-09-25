@@ -79,10 +79,15 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+'default': {
+'ENGINE': 'django.db.backends.mysql',
+'NAME': 'panun_db',
+'USER': 'root', # Not used with sqlite3.
+'PASSWORD': '123123100', # Not used with sqlite3.
+'HOST': 'mysqln', # Set to empty string for localhost. Not used with sqlite3.
+'PORT': 3309,
+'OPTIONS': { 'init_command': "SET default_storage_engine=INNODB,character_set_connection=utf8mb4,collation_connection=utf8mb4_unicode_ci" }
+}
 }
 
 REST_FRAMEWORK = {
